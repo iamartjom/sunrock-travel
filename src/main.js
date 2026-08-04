@@ -78,7 +78,7 @@ resizeCanvas();
 // Helper to compute scroll-driven fade-in / peak / fade-out state for sections
 function getSectionState(progress, minIn, peakIn, peakOut, maxOut) {
   if (progress < minIn || progress > maxOut) {
-    return { opacity: 0, blur: 12, pointerEvents: 'none' };
+    return { opacity: 0, blur: 12, isActive: false };
   }
   
   let opacity = 1;
@@ -90,16 +90,22 @@ function getSectionState(progress, minIn, peakIn, peakOut, maxOut) {
 
   opacity = Math.max(0, Math.min(1, opacity));
   const blur = (1 - opacity) * 10;
-  const pointerEvents = opacity > 0.08 ? 'auto' : 'none';
+  const isActive = opacity > 0.1;
 
-  return { opacity, blur, pointerEvents };
+  return { opacity, blur, isActive };
 }
 
 function applySectionState(el, state) {
   if (!el) return;
   el.style.opacity = state.opacity;
   el.style.filter = `blur(${state.blur}px)`;
-  el.style.pointerEvents = state.pointerEvents;
+
+  // Dynamically enable pointer events ONLY on interactive children when section is active
+  const interactiveElements = el.querySelectorAll('a, button, input, select, textarea, .feature-card, .flight-card, .about-card, .contact-info-card, .contact-form-card, .schedule-booking-bar, .cta-button');
+  const pe = state.isActive ? 'auto' : 'none';
+  interactiveElements.forEach(child => {
+    child.style.pointerEvents = pe;
+  });
 }
 
 // Lenis scroll listener & section highlight update
@@ -110,41 +116,44 @@ const bookingSection = document.getElementById('booking');
 const aboutSection = document.getElementById('about');
 const contactSection = document.getElementById('contact');
 
-lenis.on('scroll', ({ scroll, limit }) => {
-  if (limit > 0) {
-    const progress = Math.max(0, Math.min(1, scroll / limit));
-    targetFrame = progress * (TOTAL_FRAMES - 1);
+function updateSectionStates(scrollPos) {
+  const limit = lenis.limit || (document.documentElement.scrollHeight - window.innerHeight);
+  const progress = limit > 0 ? Math.max(0, Math.min(1, scrollPos / limit)) : 0;
+  targetFrame = progress * (TOTAL_FRAMES - 1);
 
-    if (document.body.classList.contains('page-loaded')) {
-      // Section 1: Hero (0.00 -> 0.18)
-      applySectionState(heroSection, getSectionState(progress, 0.00, 0.00, 0.06, 0.18));
+  if (document.body.classList.contains('page-loaded')) {
+    // Section 1: Hero (0.00 -> 0.18)
+    applySectionState(heroSection, getSectionState(progress, 0.00, 0.00, 0.06, 0.18));
 
-      // Section 2: Flight Routes (0.12 -> 0.38)
-      applySectionState(flightsSection, getSectionState(progress, 0.12, 0.22, 0.28, 0.38));
+    // Section 2: Flight Routes (0.12 -> 0.38)
+    applySectionState(flightsSection, getSectionState(progress, 0.12, 0.22, 0.28, 0.38));
 
-      // Section 3: Departures (0.32 -> 0.58)
-      applySectionState(bookingSection, getSectionState(progress, 0.32, 0.42, 0.48, 0.58));
+    // Section 3: Departures (0.32 -> 0.58)
+    applySectionState(bookingSection, getSectionState(progress, 0.32, 0.42, 0.48, 0.58));
 
-      // Section 4: About Us (0.52 -> 0.78)
-      applySectionState(aboutSection, getSectionState(progress, 0.52, 0.62, 0.68, 0.78));
+    // Section 4: About Us (0.52 -> 0.78)
+    applySectionState(aboutSection, getSectionState(progress, 0.52, 0.62, 0.68, 0.78));
 
-      // Section 5: Contact Us (0.72 -> 1.00)
-      applySectionState(contactSection, getSectionState(progress, 0.72, 0.85, 1.00, 1.00));
-    }
-
-    // Dynamic active nav update based on 5 sections scroll progress
-    if (progress < 0.20) {
-      updateActiveNav(0); // Home
-    } else if (progress < 0.40) {
-      updateActiveNav(1); // Flight Routes
-    } else if (progress < 0.60) {
-      updateActiveNav(2); // Departures
-    } else if (progress < 0.80) {
-      updateActiveNav(3); // About Us
-    } else {
-      updateActiveNav(4); // Contact
-    }
+    // Section 5: Contact Us (0.72 -> 1.00)
+    applySectionState(contactSection, getSectionState(progress, 0.72, 0.85, 1.00, 1.00));
   }
+
+  // Dynamic active nav update based on 5 sections scroll progress
+  if (progress < 0.20) {
+    updateActiveNav(0); // Home
+  } else if (progress < 0.40) {
+    updateActiveNav(1); // Flight Routes
+  } else if (progress < 0.60) {
+    updateActiveNav(2); // Departures
+  } else if (progress < 0.80) {
+    updateActiveNav(3); // About Us
+  } else {
+    updateActiveNav(4); // Contact
+  }
+}
+
+lenis.on('scroll', ({ scroll }) => {
+  updateSectionStates(scroll);
 });
 
 function updateActiveNav(activeIndex) {

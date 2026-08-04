@@ -190,7 +190,7 @@ html.lenis, html.lenis body {
   padding: 90px 44px 44px 44px;
   box-sizing: border-box;
   opacity: 0;
-  pointer-events: none;
+  pointer-events: none !important; /* Always pass scroll wheel & touch events to window */
   transition: opacity 0.1s linear, filter 0.1s linear;
   will-change: opacity, filter;
 }
@@ -198,7 +198,6 @@ html.lenis, html.lenis body {
 /* Section 1 Hero starts visible once page is loaded */
 body.page-loaded #hero.page-section {
   opacity: 1;
-  pointer-events: auto;
 }
 
 /* Section Header styling */
