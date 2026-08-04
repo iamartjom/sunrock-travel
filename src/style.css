@@ -178,18 +178,27 @@ html.lenis, html.lenis body {
   transform: scale(1.15);
 }
 
-/* Page Section Layout */
+/* Page Section Layout - Fixed Fullscreen Overlays for Scroll-Driven In-Place Transitions */
 .page-section {
-  min-height: 100vh;
-  width: 100%;
-  position: relative;
+  position: fixed;
+  inset: 0;
   z-index: 10;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 120px 44px 60px 44px;
+  padding: 90px 44px 44px 44px;
   box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.1s linear, filter 0.1s linear;
+  will-change: opacity, filter;
+}
+
+/* Section 1 Hero starts visible once page is loaded */
+body.page-loaded #hero.page-section {
+  opacity: 1;
+  pointer-events: auto;
 }
 
 /* Section Header styling */
@@ -229,31 +238,14 @@ html.lenis, html.lenis body {
 }
 
 /* Hero Section Specifics */
-.hero-section {
-  position: relative;
-  min-height: 100vh;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0 44px;
-}
-
 .hero-center {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 720px;
-  width: calc(100% - 88px);
-  z-index: 12;
-  margin: 0;
-  pointer-events: auto;
-  transition: opacity 0.1s linear, filter 0.1s linear, transform 0.1s linear;
+  margin: 0 auto;
+  transform: translateY(10px);
 }
 
 .hero-title {

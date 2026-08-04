@@ -75,33 +75,61 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
+// Helper to compute scroll-driven fade-in / peak / fade-out state for sections
+function getSectionState(progress, minIn, peakIn, peakOut, maxOut) {
+  if (progress < minIn || progress > maxOut) {
+    return { opacity: 0, blur: 12, pointerEvents: 'none' };
+  }
+  
+  let opacity = 1;
+  if (progress < peakIn) {
+    opacity = (progress - minIn) / (peakIn - minIn);
+  } else if (progress > peakOut) {
+    opacity = 1 - (progress - peakOut) / (maxOut - peakOut);
+  }
+
+  opacity = Math.max(0, Math.min(1, opacity));
+  const blur = (1 - opacity) * 10;
+  const pointerEvents = opacity > 0.08 ? 'auto' : 'none';
+
+  return { opacity, blur, pointerEvents };
+}
+
+function applySectionState(el, state) {
+  if (!el) return;
+  el.style.opacity = state.opacity;
+  el.style.filter = `blur(${state.blur}px)`;
+  el.style.pointerEvents = state.pointerEvents;
+}
+
 // Lenis scroll listener & section highlight update
 const navItems = document.querySelectorAll('.nav-item');
-const heroCenter = document.querySelector('.hero-center');
-const heroCards = document.querySelector('.hero-section .cards-container');
+const heroSection = document.getElementById('hero');
+const flightsSection = document.getElementById('flights');
+const bookingSection = document.getElementById('booking');
+const aboutSection = document.getElementById('about');
+const contactSection = document.getElementById('contact');
 
 lenis.on('scroll', ({ scroll, limit }) => {
   if (limit > 0) {
     const progress = Math.max(0, Math.min(1, scroll / limit));
     targetFrame = progress * (TOTAL_FRAMES - 1);
 
-    // Scroll-driven fade-out for Hero center content (in place, no upward movement)
-    if (heroCenter && document.body.classList.contains('page-loaded')) {
-      const heroOpacity = Math.max(0, 1 - (scroll / 320));
-      const heroScale = 1 - (1 - heroOpacity) * 0.05;
-      const heroBlur = (1 - heroOpacity) * 8;
+    if (document.body.classList.contains('page-loaded')) {
+      // Section 1: Hero (0.00 -> 0.18)
+      applySectionState(heroSection, getSectionState(progress, 0.00, 0.00, 0.06, 0.18));
 
-      heroCenter.style.opacity = heroOpacity;
-      heroCenter.style.transform = `translate(-50%, -50%) scale(${heroScale})`;
-      heroCenter.style.filter = `blur(${heroBlur}px)`;
-      heroCenter.style.pointerEvents = heroOpacity < 0.05 ? 'none' : 'auto';
-    }
+      // Section 2: Flight Routes (0.12 -> 0.38)
+      applySectionState(flightsSection, getSectionState(progress, 0.12, 0.22, 0.28, 0.38));
 
-    // Scroll-driven fade-out for Hero bottom cards
-    if (heroCards && document.body.classList.contains('page-loaded')) {
-      const cardsOpacity = Math.max(0, 1 - (scroll / 320));
-      heroCards.style.opacity = cardsOpacity;
-      heroCards.style.pointerEvents = cardsOpacity < 0.05 ? 'none' : 'auto';
+      // Section 3: Departures (0.32 -> 0.58)
+      applySectionState(bookingSection, getSectionState(progress, 0.32, 0.42, 0.48, 0.58));
+
+      // Section 4: About Us (0.52 -> 0.78)
+      applySectionState(aboutSection, getSectionState(progress, 0.52, 0.62, 0.68, 0.78));
+
+      // Section 5: Contact Us (0.72 -> 1.00)
+      applySectionState(contactSection, getSectionState(progress, 0.72, 0.85, 1.00, 1.00));
     }
 
     // Dynamic active nav update based on 5 sections scroll progress
