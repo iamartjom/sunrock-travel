@@ -98,28 +98,15 @@ lenis.on('scroll', ({ scroll, limit }) => {
   }
 });
 
-// Intersection Observer for scroll-triggered reveal with glow pulse animation
-function initScrollReveal() {
-  const observerOptions = {
-    root: null,
-    rootMargin: '0px 0px -60px 0px',
-    threshold: 0.12,
-  };
-
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('in-view');
-      }
-    });
-  }, observerOptions);
-
-  document.querySelectorAll('.reveal-on-scroll').forEach((el) => {
-    revealObserver.observe(el);
+function updateActiveNav(activeIndex) {
+  navItems.forEach((item, index) => {
+    if (index === activeIndex) {
+      item.classList.add('active');
+    } else {
+      item.classList.remove('active');
+    }
   });
 }
-
-initScrollReveal();
 
 // Render loop with lerp for silky smooth video frames animation
 function renderLoop() {
