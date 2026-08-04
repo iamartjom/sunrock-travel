@@ -64,7 +64,7 @@ html.lenis, html.lenis body {
     linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, transparent 25%, transparent 70%, rgba(0, 0, 0, 0.8) 100%);
 }
 
-/* Header Navigation */
+/* Initial state for Premium Staggered Fade-in Sequence */
 .header {
   position: fixed;
   top: 24px;
@@ -75,6 +75,9 @@ html.lenis, html.lenis body {
   align-items: center;
   justify-content: space-between;
   padding: 0 44px;
+  opacity: 0;
+  transform: translateY(-24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .logo {
@@ -144,7 +147,7 @@ html.lenis, html.lenis body {
   position: fixed;
   right: 28px;
   top: 50%;
-  transform: translateY(-50%);
+  transform: translateY(-50%) translateX(20px);
   z-index: 25;
   display: flex;
   flex-direction: column;
@@ -154,6 +157,8 @@ html.lenis, html.lenis body {
   padding: 14px 10px;
   border-radius: 100px;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0;
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .social-sidebar a {
@@ -237,7 +242,7 @@ html.lenis, html.lenis body {
   align-items: center;
   max-width: 720px;
   margin: 0 auto;
-  transform: translateY(10px); /* Centered vertically inside plane window */
+  transform: translateY(10px);
 }
 
 .hero-title {
@@ -247,6 +252,9 @@ html.lenis, html.lenis body {
   line-height: 1.08;
   color: #ffffff;
   text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .hero-subtitle {
@@ -257,6 +265,9 @@ html.lenis, html.lenis body {
   margin-top: 18px;
   max-width: 540px;
   text-shadow: 0 2px 20px rgba(0, 0, 0, 0.7);
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cta-button {
@@ -272,11 +283,13 @@ html.lenis, html.lenis body {
   margin-top: 28px;
   text-decoration: none;
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
 }
 
 .cta-button:hover {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(1.02);
   box-shadow: 0 16px 40px rgba(255, 255, 255, 0.25);
 }
 
@@ -296,7 +309,7 @@ html.lenis, html.lenis body {
   transform: translate(1px, -1px);
 }
 
-/* Feature Cards Section (Scaled for Laptop & Desktop so window frame remains clear) */
+/* Feature Cards Section (Scaled for Laptop & Desktop) */
 .hero-section .cards-container {
   position: absolute;
   bottom: 28px;
@@ -318,11 +331,13 @@ html.lenis, html.lenis body {
   -webkit-backdrop-filter: blur(28px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 24px;
-  padding: 22px 24px; /* Compact padding for laptop views */
+  padding: 22px 24px;
   width: calc(50% - 20px);
-  max-width: 340px; /* Reduced max-width so cards stay outside plane window oval frame */
+  max-width: 340px;
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
-  transition: transform 0.3s ease, border-color 0.3s ease;
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1), transform 0.9s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s ease;
 }
 
 .feature-card:hover {
@@ -355,6 +370,51 @@ html.lenis, html.lenis body {
   line-height: 1.5;
   color: rgba(255, 255, 255, 0.72);
   font-weight: 400;
+}
+
+/* =========================================================
+   STAGGERED PREMIUM ENTRANCE ANIMATION SEQUENCE (.page-loaded)
+   ========================================================= */
+body.page-loaded .header {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.1s;
+}
+
+body.page-loaded .hero-title {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.3s;
+}
+
+body.page-loaded .hero-subtitle {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.5s;
+}
+
+body.page-loaded .cta-button {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition-delay: 0.7s;
+}
+
+body.page-loaded .hero-section .feature-card:nth-child(1) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 0.9s;
+}
+
+body.page-loaded .hero-section .feature-card:nth-child(2) {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: 1.1s;
+}
+
+body.page-loaded .social-sidebar {
+  opacity: 1;
+  transform: translateY(-50%) translateX(0);
+  transition-delay: 1.25s;
 }
 
 /* Section 2: Flights Grid */

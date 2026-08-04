@@ -126,7 +126,7 @@ function renderLoop() {
   requestAnimationFrame(renderLoop);
 }
 
-// Helper to safely hide loader screen and set display: none
+// Helper to safely hide loader screen and trigger entrance sequence
 function hideLoader() {
   if (isLoaded) return;
   isLoaded = true;
@@ -139,7 +139,10 @@ function hideLoader() {
     loader.classList.add('hidden');
     setTimeout(() => {
       loader.style.display = 'none';
-    }, 850);
+      document.body.classList.add('page-loaded');
+    }, 400);
+  } else {
+    document.body.classList.add('page-loaded');
   }
 }
 
