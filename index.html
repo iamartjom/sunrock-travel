@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SUNROCK - Experience Paris & Beyond</title>
+    <!-- Plus Jakarta Sans font matching current design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <!-- Fixed background video canvas -->
+    <canvas id="video-canvas"></canvas>
+    <div class="scrim-overlay"></div>
+
+    <!-- Fixed Header Navigation -->
+    <header class="header">
+      <div class="logo">SUNROCK</div>
+
+      <nav class="nav-pill">
+        <a href="#hero" class="nav-item active">Home</a>
+        <a href="#flights" class="nav-item">Flight Routes</a>
+        <a href="#booking" class="nav-item">Departures</a>
+        <a href="#about" class="nav-item">About Us</a>
+        <a href="#contact" class="nav-item">Contact</a>
+      </nav>
+
+      <button class="menu-btn">Open menu</button>
+    </header>
+
+    <!-- Social Media Sidebar -->
+    <aside class="social-sidebar">
+      <a href="#" aria-label="Instagram">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+      </a>
+      <a href="#" aria-label="Facebook">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path></svg>
+      </a>
+      <a href="#" aria-label="Twitter / X">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z"></path></svg>
+      </a>
+    </aside>
+
+    <!-- Scrollable container defining total scroll depth and sections -->
+    <div id="scroll-container">
+      
+      <!-- Section 1: Hero -->
+      <section id="hero" class="page-section hero-section">
+        <div class="hero-center">
+          <h1 class="hero-title">Experience Paris Like<br />Never Before</h1>
+          <p class="hero-subtitle">
+            From iconic landmarks to hidden cafés and<br />
+            unforgettable moments, we create journeys that feel<br />
+            effortless and memorable
+          </p>
+
+          <a href="#flights" class="cta-button">
+            <span>Explore tours</span>
+            <div class="cta-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="7" y1="17" x2="17" y2="7"></line>
+                <polyline points="7 7 17 7 17 17"></polyline>
+              </svg>
+            </div>
+          </a>
+        </div>
+
+        <!-- Section 1 Bottom Cards -->
+        <div class="cards-container">
+          <div class="feature-card">
+            <div class="card-icon-badge">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="#2563eb" stroke="#2563eb" stroke-width="1"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <h3 class="card-title">Authentic Paris Experiences</h3>
+            <p class="card-text">Discover hidden cafés, charming streets, and iconic landmarks with expert local guides who know the city best.</p>
+          </div>
+
+          <div class="feature-card">
+            <div class="card-icon-badge">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2.2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <h3 class="card-title">Stress-Free Every Step</h3>
+            <p class="card-text">From airport transfers to curated itineraries, we handle every detail so you can simply enjoy your Paris adventure.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Destinations & Flight Classes -->
+      <section id="flights" class="page-section flights-section">
+        <div class="section-header">
+          <span class="section-badge">✈ Curated Routes</span>
+          <h2 class="section-title">Exclusive Flight Destinations</h2>
+          <p class="section-subtitle">Join us and experience premium travel routes with supreme comfort, flight duration graphics, and instant seat selection.</p>
+        </div>
+
+        <div class="flights-grid">
+          <!-- Flight Card 1: First Class -->
+          <div class="flight-card">
+            <div class="flight-card-header">
+              <span class="class-badge">✈ First Class</span>
+              <span class="flight-price">$3,800</span>
+            </div>
+            <h4 class="flight-route">Paris, FR to Tokyo, Japan</h4>
+            <div class="departure-meta">
+              <span class="meta-label">Departs:</span>
+              <span class="meta-value">Aug 14, 2026</span>
+            </div>
+            
+            <div class="flight-path-graphic">
+              <div class="path-node"></div>
+              <div class="path-line">
+                <span class="plane-icon">✈</span>
+                <span class="duration-tag">12h 45m</span>
+              </div>
+              <div class="path-node"></div>
+            </div>
+
+            <div class="flight-card-actions">
+              <button class="btn-outline">Read More</button>
+              <button class="btn-primary">Book Now</button>
+            </div>
+          </div>
+
+          <!-- Flight Card 2: Premium Class -->
+          <div class="flight-card featured-flight">
+            <div class="flight-card-header">
+              <span class="class-badge">✈ Premium Class</span>
+              <span class="flight-price">$2,400</span>
+            </div>
+            <h4 class="flight-route">Paris, FR to New York, USA</h4>
+            <div class="departure-meta">
+              <span class="meta-label">Departs:</span>
+              <span class="meta-value">Aug 18, 2026</span>
+            </div>
+            
+            <div class="flight-path-graphic">
+              <div class="path-node"></div>
+              <div class="path-line">
+                <span class="plane-icon">✈</span>
+                <span class="duration-tag">8h 15m</span>
+              </div>
+              <div class="path-node"></div>
+            </div>
+
+            <div class="flight-card-actions">
+              <button class="btn-outline">Read More</button>
+              <button class="btn-primary">Book Now</button>
+            </div>
+          </div>
+
+          <!-- Flight Card 3: Business Class -->
+          <div class="flight-card">
+            <div class="flight-card-header">
+              <span class="class-badge">✈ Business Class</span>
+              <span class="flight-price">$1,200</span>
+            </div>
+            <h4 class="flight-route">Paris, FR to Madrid, Spain</h4>
+            <div class="departure-meta">
+              <span class="meta-label">Departs:</span>
+              <span class="meta-value">Sep 02, 2026</span>
+            </div>
+            
+            <div class="flight-path-graphic">
+              <div class="path-node"></div>
+              <div class="path-line">
+                <span class="plane-icon">✈</span>
+                <span class="duration-tag">2h 10m</span>
+              </div>
+              <div class="path-node"></div>
+            </div>
+
+            <div class="flight-card-actions">
+              <button class="btn-outline">Read More</button>
+              <button class="btn-primary">Book Now</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-pagination">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </section>
+
+      <!-- Section 3: Departure Schedule & Search Bar -->
+      <section id="booking" class="page-section booking-section">
+        <div class="section-header">
+          <span class="section-badge">🗓 Flight Schedules</span>
+          <h2 class="section-title">Upcoming Departure Dates</h2>
+          <p class="section-subtitle">Select your origin, destination, and departure date to find available luxury flights.</p>
+        </div>
+
+        <div class="schedule-booking-bar">
+          <div class="search-field">
+            <label>Departure From</label>
+            <input type="text" value="Paris Charles de Gaulle (CDG)" readonly />
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <label>Destination</label>
+            <select>
+              <option>Tokyo, Japan (HND)</option>
+              <option>New York, USA (JFK)</option>
+              <option>Madrid, Spain (MAD)</option>
+              <option>London, UK (LHR)</option>
+            </select>
+          </div>
+          <div class="search-divider"></div>
+          <div class="search-field">
+            <label>Departure Date</label>
+            <input type="date" value="2026-08-14" />
+          </div>
+          <button class="search-btn">
+            <span>Find Flights</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </button>
+        </div>
+      </section>
+
+      <!-- Section 4: About Us -->
+      <section id="about" class="page-section about-section">
+        <div class="section-header">
+          <span class="section-badge">✨ Our Story & Vision</span>
+          <h2 class="section-title">Elevating The Art of Travel</h2>
+          <p class="section-subtitle">At SUNROCK, we combine luxury aviation, bespoke itineraries, and effortless hospitality to redefine global journeys.</p>
+        </div>
+
+        <div class="about-grid">
+          <div class="about-card">
+            <div class="about-stat">15+</div>
+            <h3 class="about-card-title">Years of Excellence</h3>
+            <p class="about-card-text">Our dedicated private concierges ensure every flight, hotel stay, and local encounter is crafted to perfection.</p>
+          </div>
+
+          <div class="about-card featured-about">
+            <div class="about-stat">100%</div>
+            <h3 class="about-card-title">Carbon Offset Flights</h3>
+            <p class="about-card-text">We lead sustainable luxury aviation with offset flight initiatives and eco-conscious boutique partnerships.</p>
+          </div>
+
+          <div class="about-card">
+            <div class="about-stat">120+</div>
+            <h3 class="about-card-title">Global Destinations</h3>
+            <p class="about-card-text">Curated access to secret landmarks, private islands, and exclusive cultural events around the globe.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Contact Us -->
+      <section id="contact" class="page-section contact-section">
+        <div class="section-header">
+          <span class="section-badge">✉ Get In Touch</span>
+          <h2 class="section-title">Start Your Next Journey</h2>
+          <p class="section-subtitle">Have a custom flight request or ready to book your escape? Our travel advisors are available 24/7.</p>
+        </div>
+
+        <div class="contact-container">
+          <!-- Left Info Box -->
+          <div class="contact-info-card">
+            <h3 class="contact-info-title">Global Headquarters</h3>
+            <p class="contact-info-desc">Reach out to our private concierge desk anytime.</p>
+
+            <div class="contact-details">
+              <div class="contact-detail-item">
+                <div class="detail-icon">📍</div>
+                <div>
+                  <div class="detail-label">Address</div>
+                  <div class="detail-value">75 Rue du Faubourg Saint-Honoré, Paris</div>
+                </div>
+              </div>
+
+              <div class="contact-detail-item">
+                <div class="detail-icon">📞</div>
+                <div>
+                  <div class="detail-label">24/7 Hotline</div>
+                  <div class="detail-value">+33 1 42 68 55 00</div>
+                </div>
+              </div>
+
+              <div class="contact-detail-item">
+                <div class="detail-icon">✉</div>
+                <div>
+                  <div class="detail-label">Direct Email</div>
+                  <div class="detail-value">concierge@sunrock-travel.com</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Form Box -->
+          <form class="contact-form-card" onsubmit="event.preventDefault(); alert('Thank you for reaching out! A SUNROCK concierge will contact you shortly.');">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Your Name</label>
+                <input type="text" placeholder="John Doe" required />
+              </div>
+              <div class="form-group">
+                <label>Email Address</label>
+                <input type="email" placeholder="john@example.com" required />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Destination of Interest</label>
+              <input type="text" placeholder="e.g. Paris, Tokyo, New York" />
+            </div>
+
+            <div class="form-group">
+              <label>Your Message & Travel Wishes</label>
+              <textarea rows="3" placeholder="Tell us about your desired dates, flight class, and preferences..." required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <span>Send Inquiry</span>
+              <div class="btn-arrow">↗</div>
+            </button>
+          </form>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- Preloader with SUNROCK text fill animation -->
+    <div id="loader" class="loader">
+      <div class="loader-content">
+        <div class="loader-logo-wrapper">
+          <span class="loader-logo-bg">SUNROCK</span>
+          <span id="loader-logo-fill" class="loader-logo-fill">SUNROCK</span>
+        </div>
+        <div class="loader-track">
+          <div id="loader-bar" class="loader-bar"></div>
+        </div>
+        <div id="loader-percent" class="loader-percent">0%</div>
+      </div>
+    </div>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
