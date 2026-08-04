@@ -1096,10 +1096,20 @@ body.page-loaded .social-sidebar {
 
 /* Mobile & Small Screen Breakpoints (under 768px) */
 @media (max-width: 768px) {
-  /* Page Section Container */
+  /* Page Section Container - Perfectly Vertically Centered */
   .page-section {
-    padding: 80px 16px 20px 16px;
-    justify-content: flex-start;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center !important;
+    align-items: center;
+    padding: 60px 16px 40px 16px;
+    box-sizing: border-box;
+    pointer-events: none !important;
   }
 
   .hero-section {
