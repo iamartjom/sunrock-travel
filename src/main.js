@@ -75,85 +75,68 @@ function resizeCanvas() {
 window.addEventListener('resize', resizeCanvas);
 resizeCanvas();
 
-// Helper to compute scroll-driven fade-in / peak / fade-out state for sections
-function getSectionState(progress, minIn, peakIn, peakOut, maxOut) {
-  if (progress < minIn || progress > maxOut) {
-    return { opacity: 0, blur: 12, isActive: false };
+// Helper to calculate smooth in-place fade-in/hold/fade-out for fixed sections
+function getSectionState(progress, enterStart, enterEnd, exitStart, exitEnd) {
+  if (progress < enterStart || progress > exitEnd) {
+    return { opacity: 0, scale: 0.95, blur: 8, pointerEvents: 'none' };
   }
-  
+
   let opacity = 1;
-  if (progress < peakIn) {
-    opacity = (progress - minIn) / (peakIn - minIn);
-  } else if (progress > peakOut) {
-    opacity = 1 - (progress - peakOut) / (maxOut - peakOut);
+  let scale = 1;
+  let blur = 0;
+
+  if (enterEnd > enterStart && progress < enterEnd) {
+    const ratio = Math.max(0, Math.min(1, (progress - enterStart) / (enterEnd - enterStart)));
+    opacity = ratio;
+    scale = 0.95 + ratio * 0.05;
+    blur = (1 - ratio) * 8;
+  } else if (progress > exitStart) {
+    const ratio = Math.max(0, Math.min(1, (progress - exitStart) / (exitEnd - exitStart)));
+    opacity = 1 - ratio;
+    scale = 1 - ratio * 0.05;
+    blur = ratio * 8;
   }
 
-  opacity = Math.max(0, Math.min(1, opacity));
-  const blur = (1 - opacity) * 10;
-  const isActive = opacity > 0.1;
-
-  return { opacity, blur, isActive };
-}
-
-function applySectionState(el, state) {
-  if (!el) return;
-  el.style.opacity = state.opacity;
-  el.style.filter = `blur(${state.blur}px)`;
-
-  // Dynamically enable pointer events ONLY on interactive children when section is active
-  const interactiveElements = el.querySelectorAll('a, button, input, select, textarea, .feature-card, .flight-card, .about-card, .contact-info-card, .contact-form-card, .schedule-booking-bar, .cta-button');
-  const pe = state.isActive ? 'auto' : 'none';
-  interactiveElements.forEach(child => {
-    child.style.pointerEvents = pe;
-  });
+  return {
+    opacity,
+    scale,
+    blur,
+    pointerEvents: opacity > 0.1 ? 'auto' : 'none'
+  };
 }
 
 // Lenis scroll listener & section highlight update
 const navItems = document.querySelectorAll('.nav-item');
-const heroSection = document.getElementById('hero');
-const flightsSection = document.getElementById('flights');
-const bookingSection = document.getElementById('booking');
-const aboutSection = document.getElementById('about');
-const contactSection = document.getElementById('contact');
+const sectionDefs = [
+  { id: '#hero', ranges: [0, 0, 0.14, 0.19] },
+  { id: '#flights', ranges: [0.16, 0.21, 0.35, 0.40] },
+  { id: '#booking', ranges: [0.38, 0.43, 0.57, 0.62] },
+  { id: '#about', ranges: [0.60, 0.65, 0.79, 0.84] },
+  { id: '#contact', ranges: [0.82, 0.87, 1.00, 1.05] }
+];
 
-function updateSectionStates(scrollPos) {
-  const limit = lenis.limit || (document.documentElement.scrollHeight - window.innerHeight);
-  const progress = limit > 0 ? Math.max(0, Math.min(1, scrollPos / limit)) : 0;
-  targetFrame = progress * (TOTAL_FRAMES - 1);
+lenis.on('scroll', ({ scroll, limit }) => {
+  if (limit > 0) {
+    const progress = Math.max(0, Math.min(1, scroll / limit));
+    targetFrame = progress * (TOTAL_FRAMES - 1);
 
-  if (document.body.classList.contains('page-loaded')) {
-    // Section 1: Hero (0.00 -> 0.18)
-    applySectionState(heroSection, getSectionState(progress, 0.00, 0.00, 0.06, 0.18));
+    if (document.body.classList.contains('page-loaded')) {
+      sectionDefs.forEach((sec, idx) => {
+        const el = document.querySelector(sec.id);
+        if (el) {
+          const state = getSectionState(progress, ...sec.ranges);
+          el.style.opacity = state.opacity;
+          el.style.filter = `blur(${state.blur}px)`;
+          el.style.transform = `scale(${state.scale})`;
+          el.style.pointerEvents = state.pointerEvents;
 
-    // Section 2: Flight Routes (0.12 -> 0.38)
-    applySectionState(flightsSection, getSectionState(progress, 0.12, 0.22, 0.28, 0.38));
-
-    // Section 3: Departures (0.32 -> 0.58)
-    applySectionState(bookingSection, getSectionState(progress, 0.32, 0.42, 0.48, 0.58));
-
-    // Section 4: About Us (0.52 -> 0.78)
-    applySectionState(aboutSection, getSectionState(progress, 0.52, 0.62, 0.68, 0.78));
-
-    // Section 5: Contact Us (0.72 -> 1.00)
-    applySectionState(contactSection, getSectionState(progress, 0.72, 0.85, 1.00, 1.00));
+          if (state.opacity > 0.4) {
+            updateActiveNav(idx);
+          }
+        }
+      });
+    }
   }
-
-  // Dynamic active nav update based on 5 sections scroll progress
-  if (progress < 0.20) {
-    updateActiveNav(0); // Home
-  } else if (progress < 0.40) {
-    updateActiveNav(1); // Flight Routes
-  } else if (progress < 0.60) {
-    updateActiveNav(2); // Departures
-  } else if (progress < 0.80) {
-    updateActiveNav(3); // About Us
-  } else {
-    updateActiveNav(4); // Contact
-  }
-}
-
-lenis.on('scroll', ({ scroll }) => {
-  updateSectionStates(scroll);
 });
 
 function updateActiveNav(activeIndex) {
@@ -198,6 +181,15 @@ function hideLoader() {
     setTimeout(() => {
       loader.style.display = 'none';
       document.body.classList.add('page-loaded');
+
+      // Ensure #hero starts fully visible on page load
+      const heroEl = document.querySelector('#hero');
+      if (heroEl) {
+        heroEl.style.opacity = '1';
+        heroEl.style.filter = 'blur(0px)';
+        heroEl.style.transform = 'scale(1)';
+        heroEl.style.pointerEvents = 'auto';
+      }
     }, 400);
   } else {
     document.body.classList.add('page-loaded');
