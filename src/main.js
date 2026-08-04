@@ -83,39 +83,57 @@ const sectionBooking = document.querySelector('#booking');
 const sectionAbout = document.querySelector('#about');
 const sectionContact = document.querySelector('#contact');
 
+const SECTION_TARGETS = [0.00, 0.28, 0.48, 0.68, 0.88];
+
+navItems.forEach((item, index) => {
+  item.addEventListener('click', (e) => {
+    e.preventDefault();
+    const maxScroll = lenis.limit || (document.documentElement.scrollHeight - window.innerHeight);
+    const targetScroll = SECTION_TARGETS[index] * maxScroll;
+    lenis.scrollTo(targetScroll, { duration: 1.2 });
+  });
+});
+
+const ctaBtn = document.querySelector('.cta-button');
+if (ctaBtn) {
+  ctaBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    const maxScroll = lenis.limit || (document.documentElement.scrollHeight - window.innerHeight);
+    lenis.scrollTo(SECTION_TARGETS[1] * maxScroll, { duration: 1.2 });
+  });
+}
+
 function calculateSectionFade(progress, start, end, isFirst = false, isLast = false) {
-  const fadeInWindow = 0.04;
-  const fadeOutWindow = 0.04;
+  const fadeInWindow = 0.05;
+  const fadeOutWindow = 0.05;
 
   if (progress < start || progress > end) {
-    return { opacity: 0, blur: 10, scale: 0.96, pointerEvents: 'none' };
+    return { opacity: 0, blur: 10, scale: 0.96 };
   }
 
-  // First section (Hero): Starts fully visible
+  // First section (Hero): Starts fully visible, fades out as scroll starts
   if (isFirst) {
     if (progress <= end - fadeOutWindow) {
-      return { opacity: 1, blur: 0, scale: 1.0, pointerEvents: 'auto' };
+      return { opacity: 1, blur: 0, scale: 1.0 };
     }
     const ratio = Math.max(0, (end - progress) / fadeOutWindow);
     return {
       opacity: ratio,
       blur: (1 - ratio) * 8,
-      scale: 0.95 + ratio * 0.05,
-      pointerEvents: ratio > 0.1 ? 'auto' : 'none'
+      scale: 0.95 + ratio * 0.05
     };
   }
 
   // Last section (Contact): Stays visible at bottom
   if (isLast) {
     if (progress >= start + fadeInWindow) {
-      return { opacity: 1, blur: 0, scale: 1.0, pointerEvents: 'auto' };
+      return { opacity: 1, blur: 0, scale: 1.0 };
     }
     const ratio = Math.max(0, (progress - start) / fadeInWindow);
     return {
       opacity: ratio,
       blur: (1 - ratio) * 8,
-      scale: 0.95 + ratio * 0.05,
-      pointerEvents: ratio > 0.1 ? 'auto' : 'none'
+      scale: 0.95 + ratio * 0.05
     };
   }
 
@@ -125,18 +143,16 @@ function calculateSectionFade(progress, start, end, isFirst = false, isLast = fa
     return {
       opacity: ratio,
       blur: (1 - ratio) * 8,
-      scale: 0.95 + ratio * 0.05,
-      pointerEvents: ratio > 0.1 ? 'auto' : 'none'
+      scale: 0.95 + ratio * 0.05
     };
   } else if (progress >= start + fadeInWindow && progress <= end - fadeOutWindow) {
-    return { opacity: 1, blur: 0, scale: 1.0, pointerEvents: 'auto' };
+    return { opacity: 1, blur: 0, scale: 1.0 };
   } else {
     const ratio = Math.max(0, (end - progress) / fadeOutWindow);
     return {
       opacity: ratio,
       blur: (1 - ratio) * 8,
-      scale: 0.95 + ratio * 0.05,
-      pointerEvents: ratio > 0.1 ? 'auto' : 'none'
+      scale: 0.95 + ratio * 0.05
     };
   }
 }
@@ -149,38 +165,40 @@ function applySectionStyle(el, state) {
   el.style.pointerEvents = 'none';
 }
 
+function updateSections(progress) {
+  const heroState = calculateSectionFade(progress, 0.00, 0.18, true, false);
+  const flightsState = calculateSectionFade(progress, 0.18, 0.38, false, false);
+  const bookingState = calculateSectionFade(progress, 0.38, 0.58, false, false);
+  const aboutState = calculateSectionFade(progress, 0.58, 0.78, false, false);
+  const contactState = calculateSectionFade(progress, 0.78, 1.00, false, true);
+
+  applySectionStyle(sectionHero, heroState);
+  applySectionStyle(sectionFlights, flightsState);
+  applySectionStyle(sectionBooking, bookingState);
+  applySectionStyle(sectionAbout, aboutState);
+  applySectionStyle(sectionContact, contactState);
+
+  if (progress < 0.18) {
+    updateActiveNav(0); // Home
+  } else if (progress < 0.38) {
+    updateActiveNav(1); // Flight Routes
+  } else if (progress < 0.58) {
+    updateActiveNav(2); // Departures
+  } else if (progress < 0.78) {
+    updateActiveNav(3); // About Us
+  } else {
+    updateActiveNav(4); // Contact
+  }
+}
+
 lenis.on('scroll', ({ scroll, limit }) => {
   const maxScroll = limit > 0 ? limit : (document.documentElement.scrollHeight - window.innerHeight);
   if (maxScroll > 0) {
     const progress = Math.max(0, Math.min(1, scroll / maxScroll));
     targetFrame = progress * (TOTAL_FRAMES - 1);
 
-    // Apply pinned crossfade to each section based on scroll progress
     if (document.body.classList.contains('page-loaded')) {
-      const heroState = calculateSectionFade(progress, 0.00, 0.18, true, false);
-      const flightsState = calculateSectionFade(progress, 0.18, 0.38, false, false);
-      const bookingState = calculateSectionFade(progress, 0.38, 0.58, false, false);
-      const aboutState = calculateSectionFade(progress, 0.58, 0.78, false, false);
-      const contactState = calculateSectionFade(progress, 0.78, 1.00, false, true);
-
-      applySectionStyle(sectionHero, heroState);
-      applySectionStyle(sectionFlights, flightsState);
-      applySectionStyle(sectionBooking, bookingState);
-      applySectionStyle(sectionAbout, aboutState);
-      applySectionStyle(sectionContact, contactState);
-    }
-
-    // Dynamic active nav update based on 5 sections scroll progress
-    if (progress < 0.18) {
-      updateActiveNav(0); // Home
-    } else if (progress < 0.38) {
-      updateActiveNav(1); // Flight Routes
-    } else if (progress < 0.58) {
-      updateActiveNav(2); // Departures
-    } else if (progress < 0.78) {
-      updateActiveNav(3); // About Us
-    } else {
-      updateActiveNav(4); // Contact
+      updateSections(progress);
     }
   }
 });
@@ -227,9 +245,11 @@ function hideLoader() {
     setTimeout(() => {
       loader.style.display = 'none';
       document.body.classList.add('page-loaded');
+      updateSections(0); // Initialize initial section states
     }, 400);
   } else {
     document.body.classList.add('page-loaded');
+    updateSections(0);
   }
 }
 
