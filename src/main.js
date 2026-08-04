@@ -146,12 +146,13 @@ function applySectionStyle(el, state) {
   el.style.opacity = state.opacity;
   el.style.filter = `blur(${state.blur}px)`;
   el.style.transform = `scale(${state.scale})`;
-  el.style.pointerEvents = state.pointerEvents;
+  el.style.pointerEvents = 'none';
 }
 
 lenis.on('scroll', ({ scroll, limit }) => {
-  if (limit > 0) {
-    const progress = Math.max(0, Math.min(1, scroll / limit));
+  const maxScroll = limit > 0 ? limit : (document.documentElement.scrollHeight - window.innerHeight);
+  if (maxScroll > 0) {
+    const progress = Math.max(0, Math.min(1, scroll / maxScroll));
     targetFrame = progress * (TOTAL_FRAMES - 1);
 
     // Apply pinned crossfade to each section based on scroll progress
