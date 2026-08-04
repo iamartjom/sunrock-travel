@@ -1103,30 +1103,47 @@ body.page-loaded .social-sidebar {
   }
 
   .hero-section {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 0 16px;
+    pointer-events: none !important;
   }
 
-  /* 1. Hero Center (Title + CTA) positioned in upper plane window area */
   .hero-center {
     position: fixed;
-    top: 18%;
+    top: 47%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: calc(100% - 32px);
     max-width: 380px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 12;
     margin: 0;
+    pointer-events: none;
   }
 
   .hero-title {
-    font-size: 25px;
+    font-size: clamp(24px, 6.2vw, 32px);
     line-height: 1.12;
+    letter-spacing: -0.02em;
+    text-align: center;
   }
 
   .hero-subtitle {
     font-size: 12px;
     line-height: 1.45;
     margin-top: 10px;
-    max-width: 100%;
+    max-width: 300px;
+    text-align: center;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -1134,9 +1151,10 @@ body.page-loaded .social-sidebar {
   }
 
   .cta-button {
-    margin-top: 14px;
+    margin-top: 16px;
     font-size: 12px;
     padding: 4px 5px 4px 16px;
+    pointer-events: auto;
   }
 
   .cta-icon {
@@ -1144,7 +1162,7 @@ body.page-loaded .social-sidebar {
     height: 28px;
   }
 
-  /* 2. Hero Cards Container positioned at bottom of screen */
+  /* 3. Hero Bottom Feature Cards: Equal Height & Width */
   .hero-section .cards-container {
     position: fixed;
     bottom: 24px;
@@ -1154,21 +1172,28 @@ body.page-loaded .social-sidebar {
     width: calc(100% - 32px);
     display: flex;
     flex-direction: row;
+    align-items: stretch; /* Equal height stretch */
     justify-content: space-between;
-    gap: 10px;
+    gap: 12px;
     margin: 0;
     pointer-events: none;
   }
 
   .hero-section .feature-card {
     pointer-events: auto;
-    width: calc(50% - 5px);
+    flex: 1; /* Equal flex width */
+    width: 50%;
     max-width: none;
-    padding: 14px 12px;
+    min-height: 135px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 14px 14px;
     border-radius: 18px;
     background: rgba(14, 14, 14, 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
   }
 
   .card-icon-badge {
@@ -1177,28 +1202,35 @@ body.page-loaded .social-sidebar {
     border-radius: 10px;
     margin-bottom: 8px;
     font-size: 12px;
+    flex-shrink: 0;
   }
 
   .card-title {
-    font-size: 13px;
+    font-size: 12.5px;
+    font-weight: 700;
     margin-bottom: 4px;
     line-height: 1.2;
   }
 
   .card-text {
-    font-size: 10px;
+    font-size: 10.5px;
     line-height: 1.35;
     color: rgba(255, 255, 255, 0.7);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    margin-top: auto;
   }
 
-  /* 3. Section Headers on Mobile */
+  /* 4. Section Headers: Centered on Mobile */
   .section-header {
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     max-width: 100%;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .section-badge {
@@ -1208,16 +1240,19 @@ body.page-loaded .social-sidebar {
   }
 
   .section-title {
-    font-size: 24px;
+    font-size: clamp(22px, 5.8vw, 30px);
     line-height: 1.15;
+    text-align: center;
   }
 
   .section-subtitle {
     font-size: 12px;
     margin-top: 8px;
+    text-align: center;
+    max-width: 320px;
   }
 
-  /* 4. Flight Cards Grid: Horizontal Swipeable Track on Mobile */
+  /* 5. Flight Cards Grid: Horizontal Swipeable Track on Mobile */
   .flights-grid {
     display: flex;
     overflow-x: auto;
@@ -1227,6 +1262,7 @@ body.page-loaded .social-sidebar {
     padding: 8px 4px 16px 4px;
     -webkit-overflow-scrolling: touch;
     pointer-events: auto;
+    justify-content: flex-start;
   }
 
   .flight-card {
@@ -1236,6 +1272,7 @@ body.page-loaded .social-sidebar {
     scroll-snap-align: center;
     padding: 20px 18px;
     border-radius: 20px;
+    pointer-events: auto;
   }
 
   .flight-price {
@@ -1246,7 +1283,7 @@ body.page-loaded .social-sidebar {
     font-size: 15px;
   }
 
-  /* 5. Departures Search Bar on Mobile */
+  /* 6. Departures Search Bar on Mobile */
   .schedule-booking-bar {
     flex-direction: column;
     border-radius: 22px;
@@ -1255,6 +1292,7 @@ body.page-loaded .social-sidebar {
     align-items: stretch;
     max-width: 100%;
     margin-top: 14px;
+    pointer-events: auto;
   }
 
   .search-field label {
@@ -1269,13 +1307,14 @@ body.page-loaded .social-sidebar {
     padding: 10px 20px;
     font-size: 13px;
     justify-content: center;
+    pointer-events: auto;
   }
 
   .search-divider {
     display: none;
   }
 
-  /* 6. About Grid: Horizontal Swipeable Track on Mobile */
+  /* 7. About Grid: Horizontal Swipeable Track on Mobile */
   .about-grid {
     display: flex;
     overflow-x: auto;
@@ -1285,6 +1324,7 @@ body.page-loaded .social-sidebar {
     padding: 8px 4px 16px 4px;
     -webkit-overflow-scrolling: touch;
     pointer-events: auto;
+    justify-content: flex-start;
   }
 
   .about-card {
@@ -1294,6 +1334,7 @@ body.page-loaded .social-sidebar {
     scroll-snap-align: center;
     padding: 22px 18px;
     border-radius: 20px;
+    pointer-events: auto;
   }
 
   .about-stat {
@@ -1311,7 +1352,7 @@ body.page-loaded .social-sidebar {
     line-height: 1.45;
   }
 
-  /* 7. Contact Container on Mobile */
+  /* 8. Contact Container on Mobile */
   .contact-container {
     display: flex;
     flex-direction: column;
@@ -1320,11 +1361,13 @@ body.page-loaded .social-sidebar {
     max-height: calc(100vh - 160px);
     overflow-y: auto;
     padding-bottom: 20px;
+    pointer-events: auto;
   }
 
   .contact-info-card, .contact-form-card {
     padding: 20px 18px;
     border-radius: 20px;
+    pointer-events: auto;
   }
 
   .contact-info-title {
