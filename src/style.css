@@ -417,6 +417,75 @@ body.page-loaded .social-sidebar {
   transition-delay: 1.25s;
 }
 
+/* =========================================================
+   UNIVERSAL SCROLL-TRIGGERED REVEAL WITH GLOW ANIMATION
+   ========================================================= */
+.reveal-on-scroll {
+  opacity: 0;
+  transform: translateY(36px) scale(0.97);
+  transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1), 
+              transform 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.85s ease;
+  will-change: opacity, transform, box-shadow;
+}
+
+.reveal-on-scroll.in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  animation: glowPulseEntrance 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Staggered delays for grid cards */
+.flights-grid .flight-card:nth-child(1),
+.about-grid .about-card:nth-child(1) {
+  transition-delay: 0.1s;
+}
+
+.flights-grid .flight-card:nth-child(2),
+.about-grid .about-card:nth-child(2),
+.contact-container .contact-form-card {
+  transition-delay: 0.25s;
+}
+
+.flights-grid .flight-card:nth-child(3),
+.about-grid .about-card:nth-child(3) {
+  transition-delay: 0.4s;
+}
+
+/* Entrance Glow Pulse Animation for Cards & Containers */
+@keyframes glowPulseEntrance {
+  0% {
+    box-shadow: 0 0 0px rgba(37, 99, 235, 0);
+    border-color: rgba(255, 255, 255, 0.12);
+  }
+  35% {
+    box-shadow: 0 10px 45px rgba(37, 99, 235, 0.5), 0 0 25px rgba(255, 255, 255, 0.35);
+    border-color: rgba(37, 99, 235, 0.8);
+  }
+  100% {
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    border-color: rgba(255, 255, 255, 0.14);
+  }
+}
+
+/* Entrance Glow Pulse Animation for Section Titles */
+.section-header.in-view .section-title {
+  animation: textGlowPulse 1.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes textGlowPulse {
+  0% {
+    text-shadow: 0 0 0px rgba(255, 255, 255, 0);
+  }
+  40% {
+    text-shadow: 0 0 35px rgba(37, 99, 235, 0.85), 0 0 15px rgba(255, 255, 255, 0.6);
+  }
+  100% {
+    text-shadow: 0 4px 30px rgba(0, 0, 0, 0.7);
+  }
+}
+
 /* Section 2: Flights Grid */
 .flights-grid {
   display: grid;
