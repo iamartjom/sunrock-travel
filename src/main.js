@@ -77,11 +77,32 @@ resizeCanvas();
 
 // Lenis scroll listener & section highlight update
 const navItems = document.querySelectorAll('.nav-item');
+const heroCenter = document.querySelector('.hero-center');
+const heroCards = document.querySelector('.hero-section .cards-container');
 
 lenis.on('scroll', ({ scroll, limit }) => {
   if (limit > 0) {
     const progress = Math.max(0, Math.min(1, scroll / limit));
     targetFrame = progress * (TOTAL_FRAMES - 1);
+
+    // Scroll-driven fade-out for Hero center content (in place, no upward movement)
+    if (heroCenter && document.body.classList.contains('page-loaded')) {
+      const heroOpacity = Math.max(0, 1 - (scroll / 320));
+      const heroScale = 1 - (1 - heroOpacity) * 0.05;
+      const heroBlur = (1 - heroOpacity) * 8;
+
+      heroCenter.style.opacity = heroOpacity;
+      heroCenter.style.transform = `translate(-50%, -50%) scale(${heroScale})`;
+      heroCenter.style.filter = `blur(${heroBlur}px)`;
+      heroCenter.style.pointerEvents = heroOpacity < 0.05 ? 'none' : 'auto';
+    }
+
+    // Scroll-driven fade-out for Hero bottom cards
+    if (heroCards && document.body.classList.contains('page-loaded')) {
+      const cardsOpacity = Math.max(0, 1 - (scroll / 320));
+      heroCards.style.opacity = cardsOpacity;
+      heroCards.style.pointerEvents = cardsOpacity < 0.05 ? 'none' : 'auto';
+    }
 
     // Dynamic active nav update based on 5 sections scroll progress
     if (progress < 0.20) {

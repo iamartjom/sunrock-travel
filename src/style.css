@@ -240,13 +240,20 @@ html.lenis, html.lenis body {
 }
 
 .hero-center {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
   max-width: 720px;
-  margin: 0 auto;
-  transform: translateY(10px);
+  width: calc(100% - 88px);
+  z-index: 12;
+  margin: 0;
+  pointer-events: auto;
+  transition: opacity 0.1s linear, filter 0.1s linear, transform 0.1s linear;
 }
 
 .hero-title {
